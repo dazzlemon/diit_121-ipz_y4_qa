@@ -38,21 +38,22 @@ class BinarySearchTree<Key : Comparable<Key>, Data> {
     }
   }
 
-  fun add(root: Node?, key: Key, value: Data): Node {// 6/7 goto
+  fun add(root: Node?, key: Key, value: Data): Node {// 7/8 goto
     var (prev, _) = _search(root, key)// 3
     var newNode = Node(key, value, null, null)
     if (root == null || prev == null) {// 4
       return newNode
     } else {
       if (key.compareTo(prev.key) < 0) {// 5
-        prev.left = _assign(prev.left, newNode)// 6
+        prev.left = _assign(prev.left, newNode)// 7
       } else {
-        prev.right = _assign(prev.right, newNode)// 6/7
+        prev.right = _assign(prev.right, newNode)// 7/8
       }
       return root
     }
   }
 
+  // 2 goto
   private fun _assign(node: Node?, newNode: Node) = node?.apply { value = newNode.value } ?: newNode
 
   fun print(root: Node) =

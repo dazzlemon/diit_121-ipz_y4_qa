@@ -18,4 +18,13 @@ fun main() {
   tree = bstInt.add(tree, 3, 4)
   _print()
   println(bstInt.search(tree, 3))
+
+  val board = MutableList(4) { _ -> MutableList(4) { _ -> false } }
+  val nq = NQueen()
+
+  if (nq.solve(board)) {
+    nq.printSolution(board)
+  } else {
+    print("solution doesn't exist")
+  }
 }
