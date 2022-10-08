@@ -28,15 +28,17 @@ class NQueen {
   }
 
   private fun _checkCells(board: Board, indices: List<Pair<Int, Int>>) =
-      !indices.map { pair -> board[pair.first][pair.second] }.any { i -> i }
+      !indices.map { c -> board[c.first][c.second] }.any { i -> i }
 
-  fun solve(board: Board) = _solve(board, 0)
-
-  private fun _solve(board: Board, col: Int): Boolean { // 6+
-    if (board.size != _n || board.any { i -> i.size != _n }) { // 1
+  fun solve(board: Board): Boolean {// 6+
+		if (board.size != _n || board.any { i -> i.size != _n }) { // 1
       throw Exception("incorrect size")
     }
 
+		return _solve(board, 0)
+	}
+
+  private fun _solve(board: Board, col: Int): Boolean {
     /* base case: all queens are placed */
     if (col >= _n) { // 2
       return true
