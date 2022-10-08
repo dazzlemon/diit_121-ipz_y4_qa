@@ -14,9 +14,8 @@ class NQueen {
     }
   }
 
-  /* A utility function to check if a queen can
-  be placed on board[row][col]. Note that this
-  function is called when "col" queens are already
+  /* check if queen can be placed on board[row][col].
+	this function is called when "col" queens are already
   placeed in columns from 0 to col -1. So we need
   to check only left side for attacking queens */
   fun isSafe(board: Board, row: Int, col: Int): Boolean {
@@ -33,43 +32,29 @@ class NQueen {
 
   fun solve(board: Board) = _solve(board, 0)
 
-  /* A recursive utility function to solve N
-  Queen problem */
   private fun _solve(board: Board, col: Int): Boolean {
     if (board.size != _n || board.any { i -> i.size != _n }) {
       throw Exception("incorrect size")
     }
 
-    /* base case: If all queens are placed
-    then return true */
+    /* base case: all queens are placed */
     if (col >= _n) {
       return true
     }
 
-    /* Consider this column and try placing
-    this queen in all rows one by one */
+    /* try placing queen in all cells of this column one by one */
     for (i in 0 until _n) {
-      /* Check if the queen can be placed on
-      board[i][col] */
       if (isSafe(board, i, col)) {
-        /* Place this queen in board[i][col] */
         board[i][col] = true
 
-        /* recur to place rest of the queens */
         if (_solve(board, col + 1)) {
           return true
         }
 
-        /* If placing queen in board[i][col]
-        doesn't lead to a solution then
-        remove queen from board[i][col] */
-        board[i][col] = false // BACKTRACK
+        board[i][col] = false // backtrack
       }
     }
 
-    /* If the queen can not be placed in any row in
-    this column col, then return false */
     return false
   }
 }
-// This code is contributed by Abhishek Shankhadhar
