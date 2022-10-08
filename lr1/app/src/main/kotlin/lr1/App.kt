@@ -23,7 +23,7 @@ fun main() {
   val nq = NQueen()
 
   if (nq.solve(board)) {
-    nq.printSolution(board)
+    nq.printBoard(board)
   } else {
     print("solution doesn't exist")
   }
