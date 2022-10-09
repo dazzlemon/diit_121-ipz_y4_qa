@@ -37,7 +37,7 @@ class NQueen {
   }
 
   private fun _splitRange(start: Int, split: Int, end: Int) =
-      (start until split) to (split+1 until end)
+      (start until split) to (split + 1 until end)
 
   private fun _anyQueensInCells(board: Board, indices: List<Pair<Int, Int>>) =
       indices.map { c -> board[c.first][c.second] }.any { i -> i }
