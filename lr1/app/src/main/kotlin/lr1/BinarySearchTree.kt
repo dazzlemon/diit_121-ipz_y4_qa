@@ -41,14 +41,11 @@ class BinarySearchTree<Key : Comparable<Key>, Data> {
   fun add(root: Node?, key: Key, value: Data): Node {// 7/8 goto
     var (prev, _) = _search(root, key)// 3
     var newNode = Node(key, value, null, null)
-    if (root == null) {// 4
-      return newNode
-    } else if (prev == null) {
-      root.value = value
-    } else if (key < prev.key) {// 5
-      prev.left = _assign(prev.left, newNode)// 7
-    } else {
-      prev.right = _assign(prev.right, newNode)// 7/8
+    when {// 4
+      (root == null) -> return newNode
+      (prev == null) -> root.value = value
+      (key < prev.key) -> prev.left = _assign(prev.left, newNode)// 7
+      else -> prev.right = _assign(prev.right, newNode)// 7/8
     }
     return root
   }
