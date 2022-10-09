@@ -1,5 +1,7 @@
 package lr1
 
+import kotlin.collections.reversed
+
 typealias Board = MutableList<MutableList<Boolean>>
 
 class NQueen {
@@ -14,21 +16,31 @@ class NQueen {
     }
   }
 
-  /* check if queen can be placed on board[row][col].
-  this function is called when "col" queens are already
-   placeed in columns from 0 to col -1. So we need
-   to check only left side for attacking queens */
+  /* check if queen can be placed on board[row][col] */
   fun isSafe(board: Board, row: Int, col: Int): Boolean { // many gotos
-    var _row = (0 until col).map { i: Int -> Pair(row, i) }
-    val colsReverse = col downTo 0
-    val upperDiagonal = (row downTo 0).zip(colsReverse)
-    val lowerDiagonal = (row until _n).zip(colsReverse)
+    val _row = (0 until _n).map { i -> row to i }
+    val _col = (0 until _n).map { i -> i to col }
 
-    return listOf(_row, upperDiagonal, lowerDiagonal).all { indices -> _checkCells(board, indices) }
+    val (colsBefore, colsAfter) = _splitRange(0, col, _n)
+    val (rowsBefore, rowsAfter) = _splitRange(0, row, _n)
+
+    // LR - left right
+    // UD - up down
+    val diagLU = rowsBefore.reversed().zip(colsBefore.reversed())
+    val diagRU = rowsAfter.zip(colsBefore.reversed())
+    val diagLD = rowsBefore.reversed().zip(colsAfter)
+    val diagRD = rowsAfter.zip(colsAfter)
+
+    val cells = listOf(_row, _col, diagLU, diagRU, diagLD, diagRD).flatten()
+
+    return !_anyQueensInCells(board, cells)
   }
 
-  private fun _checkCells(board: Board, indices: List<Pair<Int, Int>>) =
-      !indices.map { c -> board[c.first][c.second] }.any { i -> i }
+  private fun _splitRange(start: Int, split: Int, end: Int) =
+      (start until split) to (split+1 until end)
+
+  private fun _anyQueensInCells(board: Board, indices: List<Pair<Int, Int>>) =
+      indices.map { c -> board[c.first][c.second] }.any { i -> i }
 
   fun solve(board: Board): Boolean { // 6+
     if (board.size != _n || board.any { i -> i.size != _n }) { // 1
@@ -44,8 +56,14 @@ class NQueen {
       return true
     }
 
-    /* try placing queen in all cells of this column one by one */
-    for (i in (0 until _n).filter { i -> isSafe(board, i, col) }) { // 3, 4, 5+
+    val rows = (0 until _n)
+    val colIndices = rows.map { i -> Pair(i, col) }
+    if (_anyQueensInCells(board, colIndices)) {
+      return _solve(board, col + 1)
+    }
+
+    val safeCells = rows.filter { i -> isSafe(board, i, col) } // 3, 4, 5+
+    for (i in safeCells) {
       board[i][col] = true
 
       if (_solve(board, col + 1)) { // 6+

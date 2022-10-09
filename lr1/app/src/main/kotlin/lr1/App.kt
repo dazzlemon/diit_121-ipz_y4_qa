@@ -20,6 +20,7 @@ fun main() {
   println(bstInt.search(tree, 3))
 
   val board = MutableList(4) { _ -> MutableList(4) { _ -> false } }
+  board[1][3] = true;
   val nq = NQueen()
 
   if (nq.solve(board)) {
