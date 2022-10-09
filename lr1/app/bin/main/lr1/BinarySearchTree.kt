@@ -17,7 +17,7 @@ class BinarySearchTree<Key : Comparable<Key>, Data> {
       root: Node?,
       key: Key,
   ): Pair<Node?, Node?> {// 3 goto
-    var prev = root
+    var prev: Node? = null
     var curr = root
     var found = false;
     while (curr != null && !found) {// 1
@@ -41,16 +41,16 @@ class BinarySearchTree<Key : Comparable<Key>, Data> {
   fun add(root: Node?, key: Key, value: Data): Node {// 7/8 goto
     var (prev, _) = _search(root, key)// 3
     var newNode = Node(key, value, null, null)
-    if (root == null || prev == null) {// 4
+    if (root == null) {// 4
       return newNode
+    } else if (prev == null) {
+      root.value = value
+    } else if (key < prev.key) {// 5
+      prev.left = _assign(prev.left, newNode)// 7
     } else {
-      if (key.compareTo(prev.key) < 0) {// 5
-        prev.left = _assign(prev.left, newNode)// 7
-      } else {
-        prev.right = _assign(prev.right, newNode)// 7/8
-      }
-      return root
+      prev.right = _assign(prev.right, newNode)// 7/8
     }
+    return root
   }
 
   // 2 goto
